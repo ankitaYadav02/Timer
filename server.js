@@ -14,8 +14,20 @@ app.get('/', (req, res) => {
   });
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
-  })
+    console.log('a user connected', socket.id);
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+      });
+})
+
+io.of("/").adapter.on("create-room", (room) => {
+    console.log(`room ${room} was created`);
+  });
+  
+  io.of("/").adapter.on("join-room", (room, id) => {
+    console.log(`socket ${id} has joined room ${room}`);
+  });
 
 server.listen(PORT,()=>{
     console.log(`server listening on port ${PORT}`);
